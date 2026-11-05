@@ -1,0 +1,41 @@
+{
+  "model_name": "korean_PP-OCRv5_mobile_rec",
+  "repo_id": "PaddlePaddle/korean_PP-OCRv5_mobile_rec",
+  "revision": "c02ecaf1f22bfd1c618cce154fd19185b47e663a",
+  "source": "https://huggingface.co/PaddlePaddle/korean_PP-OCRv5_mobile_rec",
+  "license": "Apache-2.0",
+  "locked_on": "2026-11-05",
+  "files": {
+    "inference.json": {
+      "sha256": "562404e3c590c50c93778d5f0a94df21b47b5ab8f3ea6d47c7f8a7930c3bc844",
+      "bytes": 217724
+    },
+    "inference.pdiparams": {
+      "sha256": "cac3e5f12cf04aaa77f6a5bc704e4e736ef2908476551891d84b41b4e9090462",
+      "bytes": 13342671
+    },
+    "inference.yml": {
+      "sha256": "f757fa1c40e99edcf27e9cce879b93eb2a51fa46f5ef39095689b8c37dd75998",
+      "bytes": 96039
+    },
+    "config.json": {
+      "sha256": "c86a49d6301e6c4ff3398a87a2a1926b3521a46e90042833e18bbfa8ba6165c2",
+      "bytes": 229129
+    },
+    "README.md": {
+      "sha256": "0524f6bd8681b9b37f817a11a0bdd8cc99d5a4968b65b693baf532fb73f8a99b",
+      "bytes": 7110
+    }
+  },
+  "runtime": {
+    "python": "3.12.2",
+    "paddlepaddle": "3.3.1",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "streamlit": "1.66.1",
+    "opencv-contrib-python": "4.10.0.84",
+    "numpy": "2.3.5",
+    "pandas": "3.1.1",
+    "openpyxl": "3.1.5"
+  }
+}

@@ -1,0 +1,323 @@
+{
+  "test_id": "T-07",
+  "requirement": "FR-07",
+  "run_at": "2026-11-05T16:43:40",
+  "input_note": "글꼴 합성 사진. 손글씨가 아니며 개발·최종·외부 데이터가 아니다.",
+  "total_cells": 30,
+  "returned_results": 30,
+  "missing_results": 0,
+  "contract_violations": [],
+  "passed": true,
+  "by_kind": {
+    "normal": {
+      "cells": 10,
+      "status": {
+        "recognized": 10
+      },
+      "reference_exact_match": 8
+    },
+    "blur": {
+      "cells": 10,
+      "status": {
+        "recognized": 10
+      },
+      "reference_exact_match": 10
+    },
+    "blank": {
+      "cells": 10,
+      "status": {
+        "empty": 10
+      },
+      "reference_exact_match": 10
+    }
+  },
+  "model": {
+    "name": "korean_PP-OCRv5_mobile_rec",
+    "revision": "c02ecaf1f22bfd1c618cce154fd19185b47e663a",
+    "weights_sha256": "cac3e5f12cf04aaa77f6a5bc704e4e736ef2908476551891d84b41b4e9090462"
+  },
+  "config_version": "2026-11-w1",
+  "timing_seconds": {
+    "model_load": 4.72,
+    "inference_30_cells": 0.83
+  },
+  "environment": {
+    "python": "3.12.2",
+    "machine": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+    "cpu_threads": 6
+  },
+  "cells": [
+    {
+      "cell_id": "attendance/p01-r01-c01",
+      "kind": "normal",
+      "truth": "2400731",
+      "raw_text": "2400731",
+      "confidence": 0.9995171427726746,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r01-c02",
+      "kind": "normal",
+      "truth": "김가람",
+      "raw_text": "김가람",
+      "confidence": 0.9992179870605469,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r01-c03",
+      "kind": "normal",
+      "truth": "2026.11.03",
+      "raw_text": "2026.11.03",
+      "confidence": 0.9646906852722168,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r02-c05",
+      "kind": "normal",
+      "truth": "지각",
+      "raw_text": "지각",
+      "confidence": 0.9982929229736328,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r03-c01",
+      "kind": "blur",
+      "truth": "2400953",
+      "raw_text": "2400953",
+      "confidence": 0.9997910857200623,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r03-c02",
+      "kind": "blur",
+      "truth": "박다온",
+      "raw_text": "박다온",
+      "confidence": 0.9834935665130615,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r03-c03",
+      "kind": "blur",
+      "truth": "2026.11.03",
+      "raw_text": "2026.11.03",
+      "confidence": 0.9702550768852234,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r08-c01",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r08-c03",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "attendance/p01-r09-c05",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r01-c02",
+      "kind": "normal",
+      "truth": "2400731",
+      "raw_text": "2400731",
+      "confidence": 0.9994500279426575,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r01-c04",
+      "kind": "normal",
+      "truth": "오실로스코프",
+      "raw_text": "오실로스코프",
+      "confidence": 0.9923918843269348,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r01-c05",
+      "kind": "normal",
+      "truth": "1",
+      "raw_text": "/",
+      "confidence": 0.9938353300094604,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r02-c02",
+      "kind": "blur",
+      "truth": "2400842",
+      "raw_text": "2400842",
+      "confidence": 0.9994664788246155,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r02-c03",
+      "kind": "blur",
+      "truth": "이나래",
+      "raw_text": "이나래",
+      "confidence": 0.7650497555732727,
+      "status": "recognized",
+      "reasons": [
+        "low_confidence"
+      ]
+    },
+    {
+      "cell_id": "equipment_rental/p01-r02-c04",
+      "kind": "blur",
+      "truth": "멀티미터",
+      "raw_text": "멀티미터",
+      "confidence": 0.9571492075920105,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r07-c01",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r07-c04",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r08-c02",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "equipment_rental/p01-r08-c06",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r01-c01",
+      "kind": "normal",
+      "truth": "2400731",
+      "raw_text": "240073/",
+      "confidence": 0.9695468544960022,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r01-c04",
+      "kind": "normal",
+      "truth": "22",
+      "raw_text": "22",
+      "confidence": 0.9982783794403076,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r01-c08",
+      "kind": "normal",
+      "truth": "84",
+      "raw_text": "84",
+      "confidence": 0.999809980392456,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r02-c01",
+      "kind": "blur",
+      "truth": "2400842",
+      "raw_text": "2400842",
+      "confidence": 0.9996050596237183,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r02-c02",
+      "kind": "blur",
+      "truth": "이나래",
+      "raw_text": "이나래",
+      "confidence": 0.940605640411377,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r02-c04",
+      "kind": "blur",
+      "truth": "25",
+      "raw_text": "25",
+      "confidence": 0.9995747804641724,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r02-c08",
+      "kind": "blur",
+      "truth": "88",
+      "raw_text": "88",
+      "confidence": 0.9993959665298462,
+      "status": "recognized",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r07-c01",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r07-c05",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    },
+    {
+      "cell_id": "lab_evaluation/p01-r08-c08",
+      "kind": "blank",
+      "truth": "",
+      "raw_text": "",
+      "confidence": null,
+      "status": "empty",
+      "reasons": []
+    }
+  ]
+}

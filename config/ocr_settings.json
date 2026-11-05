@@ -1,0 +1,19 @@
+{
+  "config_version": "2026-11-w1",
+  "batch_size": 8,
+  "cpu_threads": 6,
+  "cell_margin_px": 7,
+  "trim_padding_px": 8,
+  "blank": {
+    "dark_delta": 45,
+    "min_ink_ratio": 0.002,
+    "min_component_px": 12
+  },
+  "line_split": {
+    "min_gap_px": 6,
+    "min_line_height_px": 22
+  },
+  "review": {
+    "low_confidence_threshold": 0.8
+  }
+}

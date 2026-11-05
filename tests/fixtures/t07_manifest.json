@@ -1,0 +1,242 @@
+[
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r01-c01",
+  "kind": "normal",
+  "truth": "2400731"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r01-c02",
+  "kind": "normal",
+  "truth": "김가람"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r01-c03",
+  "kind": "normal",
+  "truth": "2026.11.03"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r02-c05",
+  "kind": "normal",
+  "truth": "지각"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r03-c01",
+  "kind": "blur",
+  "truth": "2400953"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r03-c02",
+  "kind": "blur",
+  "truth": "박다온"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r03-c03",
+  "kind": "blur",
+  "truth": "2026.11.03"
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r08-c01",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r08-c03",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "attendance_synthetic.jpg",
+  "template_id": "attendance",
+  "version": "1",
+  "cell_id": "p01-r09-c05",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r01-c02",
+  "kind": "normal",
+  "truth": "2400731"
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r01-c04",
+  "kind": "normal",
+  "truth": "오실로스코프"
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r01-c05",
+  "kind": "normal",
+  "truth": "1"
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r02-c02",
+  "kind": "blur",
+  "truth": "2400842"
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r02-c03",
+  "kind": "blur",
+  "truth": "이나래"
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r02-c04",
+  "kind": "blur",
+  "truth": "멀티미터"
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r07-c01",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r07-c04",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r08-c02",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "equipment_rental_synthetic.jpg",
+  "template_id": "equipment_rental",
+  "version": "1",
+  "cell_id": "p01-r08-c06",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r01-c01",
+  "kind": "normal",
+  "truth": "2400731"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r01-c04",
+  "kind": "normal",
+  "truth": "22"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r01-c08",
+  "kind": "normal",
+  "truth": "84"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r02-c01",
+  "kind": "blur",
+  "truth": "2400842"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r02-c02",
+  "kind": "blur",
+  "truth": "이나래"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r02-c04",
+  "kind": "blur",
+  "truth": "25"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r02-c08",
+  "kind": "blur",
+  "truth": "88"
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r07-c01",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r07-c05",
+  "kind": "blank",
+  "truth": ""
+ },
+ {
+  "file": "lab_evaluation_synthetic.jpg",
+  "template_id": "lab_evaluation",
+  "version": "1",
+  "cell_id": "p01-r08-c08",
+  "kind": "blank",
+  "truth": ""
+ }
+]
