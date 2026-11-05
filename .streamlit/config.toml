@@ -1,0 +1,10 @@
+[server]
+address = "localhost"
+port = 8501
+maxUploadSize = 20
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"

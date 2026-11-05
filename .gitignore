@@ -1,0 +1,25 @@
+# 가상환경·캐시
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 작업 데이터: 업로드 사진과 인식 결과는 저장소에 올리지 않는다
+data/
+
+# 비밀값
+.env
+.env.*
+.streamlit/secrets.toml
+*.pem
+*.key
+*.p12
+*credentials*.json
+
+# 개인 도구 설정·로그
+.claude/
+.idea/
+.vscode/
+*.log
+Thumbs.db
+Desktop.ini

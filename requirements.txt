@@ -1,0 +1,12 @@
+# 직접 사용하는 패키지. 전체 고정 버전은 requirements.lock.txt를 따른다.
+# opencv-python-headless를 함께 설치하면 cv2가 충돌하므로 설치하지 않는다.
+paddlepaddle==3.3.1
+paddleocr==3.7.0
+streamlit==1.66.1
+opencv-contrib-python==4.10.0.84
+numpy==2.3.5
+pandas==3.1.1
+pillow==13.0.0
+openpyxl==3.1.5
+huggingface-hub==2.4.0
+pytest==9.2.0
