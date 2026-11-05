@@ -1,0 +1,90 @@
+{
+  "template_id": "attendance",
+  "name": "출석표",
+  "version": "1",
+  "page": {
+    "width": 1654,
+    "height": 2339,
+    "dpi": 200
+  },
+  "grid": {
+    "x_edges": [
+      100,
+      400,
+      660,
+      960,
+      1094,
+      1554
+    ],
+    "y_edges": [
+      300,
+      410,
+      502,
+      594,
+      686,
+      778,
+      870,
+      962,
+      1054,
+      1146,
+      1238,
+      1330,
+      1422,
+      1514,
+      1606,
+      1698,
+      1790,
+      1882,
+      1974,
+      2066,
+      2158,
+      2250
+    ],
+    "header_rows": 1
+  },
+  "columns": [
+    {
+      "key": "student_id",
+      "label": "학번",
+      "type": "student_id",
+      "required": true,
+      "length": 7
+    },
+    {
+      "key": "name",
+      "label": "이름",
+      "type": "name",
+      "required": true,
+      "dictionary": "roster"
+    },
+    {
+      "key": "date",
+      "label": "날짜",
+      "type": "date",
+      "required": true,
+      "date_formats": [
+        "%Y-%m-%d",
+        "%Y.%m.%d",
+        "%y.%m.%d",
+        "%m/%d",
+        "%m.%d"
+      ]
+    },
+    {
+      "key": "present",
+      "label": "출석",
+      "type": "check",
+      "required": false
+    },
+    {
+      "key": "note",
+      "label": "비고",
+      "type": "text",
+      "required": false
+    }
+  ],
+  "business_key": [
+    "student_id",
+    "date"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "template_id": "equipment_rental",
+  "name": "장비 대여 장부",
+  "version": "1",
+  "page": {
+    "width": 1654,
+    "height": 2339,
+    "dpi": 200
+  },
+  "grid": {
+    "x_edges": [
+      100,
+      330,
+      570,
+      770,
+      1110,
+      1210,
+      1440,
+      1554
+    ],
+    "y_edges": [
+      300,
+      410,
+      532,
+      654,
+      776,
+      898,
+      1020,
+      1142,
+      1264,
+      1386,
+      1508,
+      1630,
+      1752,
+      1874,
+      1996,
+      2118,
+      2240
+    ],
+    "header_rows": 1
+  },
+  "columns": [
+    {
+      "key": "rent_date",
+      "label": "대여일",
+      "type": "date",
+      "required": true,
+      "date_formats": [
+        "%Y-%m-%d",
+        "%Y.%m.%d",
+        "%y.%m.%d",
+        "%m/%d",
+        "%m.%d"
+      ]
+    },
+    {
+      "key": "student_id",
+      "label": "학번",
+      "type": "student_id",
+      "required": true,
+      "length": 7
+    },
+    {
+      "key": "name",
+      "label": "이름",
+      "type": "name",
+      "required": true,
+      "dictionary": "roster"
+    },
+    {
+      "key": "equipment",
+      "label": "장비명",
+      "type": "equipment",
+      "required": true,
+      "dictionary": "equipment"
+    },
+    {
+      "key": "quantity",
+      "label": "수량",
+      "type": "int",
+      "required": true,
+      "min": 1,
+      "max": 99
+    },
+    {
+      "key": "return_date",
+      "label": "반납일",
+      "type": "date",
+      "required": false,
+      "date_formats": [
+        "%Y-%m-%d",
+        "%Y.%m.%d",
+        "%y.%m.%d",
+        "%m/%d",
+        "%m.%d"
+      ]
+    },
+    {
+      "key": "returned",
+      "label": "반납",
+      "type": "check",
+      "required": false
+    }
+  ],
+  "business_key": [
+    "rent_date",
+    "student_id",
+    "equipment"
+  ]
+}
