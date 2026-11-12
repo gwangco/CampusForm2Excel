@@ -26,6 +26,9 @@ python -m venv .venv
 
 1. **1단계**: 양식을 고르고 사진을 올린 뒤 `보정·셀 정합 시작`을 누릅니다. 양식을 잘못 골랐으면 안내가 나오고, 양식을 바꿔 같은 사진으로 다시 정합할 수 있습니다.
 2. **2단계**: `셀 인식 시작`을 누르면 셀별 인식값·신뢰도·상태를 보여 줍니다. 셀을 고르면 원본과 대조할 수 있습니다.
+   - `검수 필요한 셀만 보기`로 사유를 확인합니다. 원본과 대조한 값을 입력하고 `셀 확인·저장`을 누릅니다. 체크 칸은 직접 확인해 값을 입력하거나 빈칸으로 저장합니다.
+   - 작업 주소를 다시 열면 저장한 검수값이 복원됩니다. 검수값과 수정 이력은 작업 폴더의 `review.sqlite3`에 저장됩니다.
+3. **3단계**: 2단계에서 선택한 한 페이지의 미리보기를 확인하고 `확정 XLSX 다운로드`를 누릅니다. 검수 대상이 남아 있으면 2단계에서 해결합니다. 중복 행은 원본을 대조한 뒤 그대로 저장할 수 있습니다. Excel에서 학번의 앞자리 0이 유지됩니다.
 
 작성용 빈 양식은 [forms/빈양식_3종_인쇄용.pdf](forms/빈양식_3종_인쇄용.pdf)입니다.
 
@@ -49,6 +52,8 @@ python -m venv .venv
 | `campusform2excel/alignment.py` | 표 검출, 기울기 보정, 셀 정합 (FR-04, 06) |
 | `campusform2excel/ocr.py` | PaddleOCR 연동, `recognize_cells` (FR-07) |
 | `campusform2excel/pipeline.py` | 작업 단위 처리 흐름과 결과 저장 |
+| `campusform2excel/review.py` | 양식 규칙 검증 및 셀 검수 이력 저장 (FR-13~15) |
+| `campusform2excel/export.py` | 한 페이지의 확정 XLSX 생성 (FR-17) |
 | `config/templates/` | 양식 3종 설정 |
 | `config/ocr_settings.json` | OCR 실행 설정 |
 | `config/model_lock.json` | 모델 리비전·해시·라이브러리 버전 |

@@ -2,21 +2,20 @@
 
     streamlit run app.py
 
-11월 1주 범위: 양식 선택·업로드·보정·셀 정합(SC-01, SC-02)과 인식 결과 조회(SC-06).
-값 수정·저장은 11월 2주, 파일 저장은 11월 2주 이후에 이 화면에 연결한다.
+양식 선택·업로드·보정, 원본 대조·검수 및 한 페이지 XLSX 저장을 지원한다.
 """
 from __future__ import annotations
 
 import re
 from collections import Counter
-from typing import Any
+from pathlib import Path
 
 import cv2
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-from campusform2excel.alignment import crop_cell
+from campusform2excel.export import XLSX_MIME, xlsx_bytes
 from campusform2excel.imaging import read_image, to_rgb
 from campusform2excel.intake import MAX_FILES, Upload, validate_uploads
 from campusform2excel.ocr import ModelError, PaddleEngine, load_model_lock, load_settings
@@ -33,10 +32,10 @@ from campusform2excel.pipeline import (
     job_dir,
     load_job,
     page_cells,
-    page_results,
     recognize_job,
     set_template,
 )
+from campusform2excel.review import PageReview, ReviewCell, ReviewError, inspect_page, save_review
 from campusform2excel.templates import Template, list_templates, load_template
 
 JOB_ID_PATTERN = re.compile(r"^\d{8}-\d{6}-[0-9a-f]{6}$")
@@ -47,7 +46,7 @@ STATUS_LABELS = {
     "empty": "빈칸",
     "unreadable": "판독 불가",
     "failed": "실패",
-    "deferred": "체크 칸(11월 3주)",
+    "deferred": "수동 확인",
 }
 REASON_LABELS = {
     "low_confidence": "낮은 신뢰도",
@@ -57,7 +56,8 @@ REASON_LABELS = {
     "invalid_image": "이미지 오류",
     "invalid_cell_id": "셀 ID 오류",
     "duplicate_cell_id": "셀 ID 중복",
-    "mark_check_pending": "표식 판정 전",
+    "missing_result": "OCR 응답 누락",
+    "mark_check_pending": "원본의 체크 칸을 확인해 주세요.",
 }
 
 
@@ -192,56 +192,79 @@ def run_recognition(job: Job) -> None:
     def report(index: int, total: int, name: str) -> None:
         bar.progress((index - 1) / total, text=f"{index}/{total}쪽 인식 중: {name}")
 
-    recognize_job(job, engine, progress=report)
+    recognize_job(job, engine, progress=report, only_pending=True)
     bar.empty()
     st.rerun()
 
 
-def result_table(rows: list[dict[str, Any]], template: Template) -> pd.DataFrame:
+def result_table(cells: list[ReviewCell], template: Template) -> pd.DataFrame:
     labels = [column["label"] for column in template.columns]
     return pd.DataFrame([
         {
-            "셀 ID": row["cell_id"],
-            "행": row["row"],
-            "열": labels[row["col"] - 1],
-            "인식값": row["raw_text"],
-            "신뢰도": row["confidence"],
-            "상태": STATUS_LABELS.get(row["status"], row["status"]),
-            "검수": "필요" if row["review_required"] else "",
-            "사유": ", ".join(REASON_LABELS.get(reason, reason) for reason in row["reasons"]),
+            "셀 ID": cell.box.cell_id,
+            "행": cell.box.row,
+            "열": labels[cell.box.col - 1],
+            "OCR 원본값": cell.result["raw_text"],
+            "현재 값": cell.value,
+            "신뢰도": cell.result["confidence"],
+            "인식 상태": STATUS_LABELS.get(cell.result["status"], cell.result["status"]),
+            "검수": "필요" if cell.issues else ("저장됨" if cell.saved else ""),
+            "사유": " · ".join(REASON_LABELS.get(issue, issue) for issue in cell.issues),
         }
-        for row in rows
+        for cell in cells
     ])
 
 
-def render_cell_detail(job: Job, page: Page, row: dict[str, Any]) -> None:
-    """SC-06: 선택한 셀의 원본과 인식값을 함께 보여 준다."""
-    image = read_image(job_dir(job) / page.corrected)
-    st.image(to_rgb(crop_cell(image, tuple(row["bbox"]))), caption=f"{row['cell_id']} 원본 셀")
+def render_cell_detail(job: Job, page: Page, cell: ReviewCell) -> None:
+    """원본 사진의 해당 셀을 대조하면서 값 수정 또는 빈칸을 확정한다."""
+    image = read_image(job_dir(job) / page.original)
+    quad = np.rint(cell.box.source_quad).astype(np.int32)
+    x, y, width, height = cv2.boundingRect(quad)
+    cv2.polylines(image, [quad], True, (60, 170, 40), 2)
+    crop = image[max(0, y):y + height, max(0, x):x + width]
+    st.image(to_rgb(crop if crop.size else image), caption=f"{cell.box.cell_id} · 업로드 원본")
+    row = cell.result
     confidence = "없음" if row["confidence"] is None else f"{row['confidence']:.3f}"
-    st.markdown(f"**인식값** `{row['raw_text'] or '(없음)'}`  ·  **신뢰도** {confidence}")
-    st.caption(f"모델 {row['model_name']} · 설정 {row['config_version']} · "
-               f"양식 {row['template_id']} v{row['template_version']}")
+    st.markdown(f"**OCR 원본값** `{row['raw_text'] or '(없음)'}`  ·  **신뢰도** {confidence}")
+    if "model_name" in row:
+        st.caption(f"모델 {row['model_name']} · 설정 {row['config_version']} · "
+                   f"양식 {job.template_id} v{job.template_version}")
+    if cell.issues:
+        st.warning(" · ".join(REASON_LABELS.get(issue, issue) for issue in cell.issues))
+    if cell.saved:
+        st.caption("검수값을 저장했습니다.")
+
+    revision = cell.saved.revision if cell.saved else 0
+    form_key = f"edit_{job.job_id}_{job.template_id}_{job.template_version}_{cell.box.cell_id}_{revision}"
+    with st.form(form_key):
+        value = st.text_input("확정할 값", value=cell.value, max_chars=32767)
+        if st.form_submit_button("셀 확인·저장"):
+            try:
+                save_review(job, cell, value)
+            except ReviewError as error:
+                st.error(str(error))
+            else:
+                st.rerun()
 
 
-def render_results(job: Job, template: Template) -> None:
-    done = [page for page in job.pages if page.status == PAGE_RECOGNIZED]
-    rows_by_page = {page.number: page_results(job, page) for page in done}
-    rows = [row for page_rows in rows_by_page.values() for row in page_rows]
-    counts = Counter(row["status"] for row in rows)
+def render_results(job: Job, page: Page, template: Template, review: PageReview) -> None:
+    counts = Counter(cell.result["status"] for cell in review.cells)
 
     columns = st.columns(5)
-    columns[0].metric("전체 셀", len(rows))
+    columns[0].metric("전체 셀", len(review.cells))
     columns[1].metric("인식", counts["recognized"])
     columns[2].metric("빈칸", counts["empty"])
-    columns[3].metric("검수 필요", sum(row["review_required"] for row in rows))
+    columns[3].metric("검수 필요", sum(bool(cell.issues) for cell in review.cells))
     columns[4].metric("실패", counts["failed"] + counts["unreadable"])
 
-    page = st.selectbox("페이지", done, format_func=lambda item: f"{item.number}쪽 · {item.file_name}")
-    show_empty = st.toggle("빈칸도 보기", value=False)
-    visible = [row for row in rows_by_page[page.number] if show_empty or row["status"] != "empty"]
+    show_empty = st.toggle("미사용 행도 보기", value=not review.rows)
+    only_issues = st.toggle("검수 필요한 셀만 보기", value=False)
+    visible = [
+        cell for cell in review.cells
+        if (show_empty or cell.box.row in review.rows) and (not only_issues or cell.issues)
+    ]
     if not visible:
-        st.info("글자가 적힌 셀이 없습니다.")
+        st.info("이 조건에 해당하는 셀이 없습니다.")
         return
 
     table_area, detail_area = st.columns([3, 2], gap="large")
@@ -251,15 +274,18 @@ def render_results(job: Job, template: Template) -> None:
             column_config={"신뢰도": st.column_config.NumberColumn(format="%.3f")},
         )
     with detail_area:
-        by_id = {row["cell_id"]: row for row in visible}
+        by_id = {cell.box.cell_id: cell for cell in visible}
         cell_id = st.selectbox(
-            "원본과 대조할 셀", list(by_id), key=f"cell_{page.number}",
-            format_func=lambda item: f"{item} · {by_id[item]['raw_text'] or '(없음)'}",
+            "원본과 대조할 셀", list(by_id), key=f"cell_{job.job_id}_{job.template_id}_{page.number}",
+            format_func=lambda item: (
+                f"{by_id[item].box.row}행 · {template.columns[by_id[item].box.col - 1]['label']} · "
+                f"{by_id[item].value or '(빈칸)'}"
+            ),
         )
         render_cell_detail(job, page, by_id[cell_id])
 
 
-def render_review_tab(job: Job | None) -> None:
+def render_review_tab(job: Job | None) -> tuple[Page, Template, PageReview] | None:
     if job is None:
         st.info("1단계에서 양식을 고르고 사진을 올려 주세요.")
         return
@@ -271,15 +297,64 @@ def render_review_tab(job: Job | None) -> None:
 
     template = job_template(job)
     st.caption(f"{template.label} · 정합 성공 {len(ready)}/{len(job.pages)}쪽")
-    if st.button("셀 인식 시작", type="primary"):
+    pending = [page for page in ready if page.status != PAGE_RECOGNIZED]
+    label = "셀 인식 시작" if any(page.status == PAGE_ALIGNED for page in pending) else "인식 실패 쪽 다시 시도"
+    if pending and st.button(label, type="primary"):
         run_recognition(job)
     for page in job.pages:
         if page.status == PAGE_OCR_FAILED:
             st.error(f"{page.number}쪽: {page.message}")
 
-    if any(page.status == PAGE_RECOGNIZED for page in job.pages):
-        render_results(job, template)
-        st.caption("값 수정과 저장은 11월 2주에 연결됩니다.")
+    done = [page for page in job.pages if page.status == PAGE_RECOGNIZED]
+    if not done:
+        return None
+
+    page = st.selectbox("검수·저장할 페이지", done, format_func=lambda item: f"{item.number}쪽 · {item.file_name}")
+    review = inspect_page(job, page, template)
+    render_results(job, page, template, review)
+    return page, template, review
+
+
+def render_export_tab(job: Job | None, selection: tuple[Page, Template, PageReview] | None) -> None:
+    if job is None or selection is None:
+        st.info("2단계에서 페이지를 인식한 뒤 저장할 수 있습니다.")
+        return
+
+    page, template, review = selection
+    st.subheader(f"{page.number}쪽 XLSX 저장")
+    st.caption(f"{page.file_name} · {template.label} · 데이터 {len(review.rows)}행")
+    if review.rows:
+        preview = pd.DataFrame(
+            [[cell.value for cell in cells] for cells in review.rows.values()],
+            columns=[column["label"] for column in template.columns],
+            index=list(review.rows),
+        )
+        preview.index.name = "원본 행"
+        st.dataframe(preview)
+
+    duplicates_confirmed = False
+    if review.duplicates:
+        for rows in review.duplicates.values():
+            st.warning(f"원본 {', '.join(map(str, rows))}행의 업무 키가 같습니다.")
+        duplicates_confirmed = st.checkbox(
+            "원본을 대조했고 중복 행을 그대로 저장합니다.",
+            key=f"duplicates_{job.job_id}_{template.label}_{page.number}_{list(review.duplicates.items())}",
+        )
+
+    remaining = sum(bool(cell.issues) for cell in review.cells)
+    if remaining:
+        st.warning(f"검수가 필요한 셀이 {remaining}개 남았습니다. 2단계에서 원본과 대조하고 저장해 주세요.")
+        return
+    try:
+        data = xlsx_bytes(review, template, duplicates_confirmed=duplicates_confirmed)
+    except ReviewError as error:
+        st.info(str(error))
+        return
+
+    st.download_button(
+        "확정 XLSX 다운로드", data, file_name=f"{Path(page.file_name).stem}_검수.xlsx",
+        mime=XLSX_MIME, type="primary", on_click="ignore",
+    )
 
 
 def render_settings_tab(templates: list[Template]) -> None:
@@ -323,9 +398,9 @@ def main() -> None:
     with upload:
         render_upload_tab(templates, job)
     with review:
-        render_review_tab(job)
+        selection = render_review_tab(job)
     with export:
-        st.info("병합과 XLSX·CSV 저장은 다음 일정에 연결됩니다.")
+        render_export_tab(job, selection)
     with settings:
         render_settings_tab(templates)
 

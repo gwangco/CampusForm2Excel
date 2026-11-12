@@ -170,10 +170,11 @@ def _page_inputs(job: Job, page: Page, margin: int, root: Path) -> list[CellInpu
 
 
 def recognize_job(job: Job, engine: Engine, settings: dict[str, Any] | None = None,
-                  root: Path = JOBS_DIR, progress: Progress | None = None) -> None:
+                  root: Path = JOBS_DIR, progress: Progress | None = None, *, only_pending: bool = False) -> None:
     """정합에 성공한 페이지를 순서대로 인식하고 셀별 결과를 저장한다."""
     settings = settings or load_settings()
-    ready = [page for page in job.pages if page.status in (PAGE_ALIGNED, PAGE_RECOGNIZED, PAGE_OCR_FAILED)]
+    statuses = (PAGE_ALIGNED, PAGE_OCR_FAILED) if only_pending else (PAGE_ALIGNED, PAGE_OCR_FAILED, PAGE_RECOGNIZED)
+    ready = [page for page in job.pages if page.status in statuses]
     for index, page in enumerate(ready, start=1):
         if progress:
             progress(index, len(ready), page.file_name)
